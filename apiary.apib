@@ -1,0 +1,67 @@
+FORMAT: 1A
+HOST: http://sit4.boots.com/
+
+# Integated Forms outcome postback
+Integrated Webforms forms (Clinic and PMed Forms) will need to communicate the
+outcome of the Webforms logic to WCS uppon form submission.
+
+This document describes the, IBM developed, WCS webservice that will consume 
+the Webforms postbacks that are generated when a pharmacy customer completes
+the filling out of a Webform.
+
+## Data Structures
+
+### UUID (string)
+A plain old UUID.
+Eg: da1eab5c-9995-42a1-8393-9b2bbe96c9b0
+
+### Outcome (enum[number])
++ 0 - Accepted
++ 1 - Rejected
++ 2 - Refered
+
+### Submission (object)
+
+- clinicSessionID: `da1eab5c-9995-42a1-8393-9b2bbe96c9b0` (required, UUID) - The session ID given by WCS
+- submissionID: `da1eab5c-9995-42a1-8393-9b2bbe96c9b0` (required, UUID) - The Webforms Analytics record ID leading to the data submitted via teh Webform
+- outcome: 0, 1, 2 (optional, enum[number]) - The outcome computed based on the submitted data. The available values are: 0 (Accepted), 1 (Rejected), 2 (Referred)
+- progressBarSegments: 8 (optional, number) - the total number of progressbar segments Webforms rendered.
+
+### WCS Response (object)
+
++ location: http://google.com (optional, string) - The location to redirect the customer's user agent. This way WCS can return a URL where the customer journey continues.
+
+### Error
+
++ errorCode: 100 (required,number) - an identifier for a formal error.
++ errorLog: log1, log2 (optional, array) - an array of technical error messages to be also logged by the consuming application (Webforms).
++ errorMessage: An error occured (required, string) - an error message aimed at a non technical user.
+
+
+### WCS Errors (array[Error])
+
+## PH form status servlet [/webapp/servlet/PHFormStatus]
+### Post a new Clinic or PMeds form outcome  [POST]
+Available under `/webapp/servlet/PHFormStatus`.
+
+In order to post a form outcome just HTTP POST the outcome with the session 
+UUID to the PHFormStatus endpoint. The expected payload is a JSON encoded 
+object.  
+
+For PMed forms just rename the attribute `clinicSessionID` to `pmedSessionID`.
+
++ Request (application/json)
+    This is the payload that Webforms will deliver to WCS uppon a Webform submission.
+
+    + Attributes (Submission)
+
+
++ Response 201 (application/json)
+    The expected success response. This means WCS has processed the above request and the user can now be navigated away from the Webform to some WCS controlled page.
+
+    + Attributes (WCS Response)
+
++ Response 400 (application/json)
+    Something went wrong. The Customer must be notified about this as do the Webforms operators.
+    
+    + Attributes (array[Error], fixed)
