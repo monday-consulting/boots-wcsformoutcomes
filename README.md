@@ -1,2 +1,2 @@
 # Boots WCS Form Outcomes
-API Bluerint for WCS Form outcome service developed by IBM
+API Blueprint for WCS Form outcome service developed by IBM
