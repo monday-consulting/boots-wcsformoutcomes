@@ -9,6 +9,8 @@ This document describes the, IBM developed, WCS webservice that will consume
 the Webforms postbacks that are generated when a pharmacy customer completes
 the filling out of a Webform.
 
+This documentation can originally be found under the following URL: http://docs.wcsformoutcomes.apiary.io/
+
 ## Data Structures
 
 ### UUID (string)
@@ -16,17 +18,30 @@ A plain old UUID.
 Eg: da1eab5c-9995-42a1-8393-9b2bbe96c9b0
 
 ### Outcome (enum[number])
-+ 0 - Accepted
-+ 1 - Rejected
-+ 2 - Refered
-+ 3 - Canceled
+
++ 0 - The form logic determined an `accepted` state.
++ 1 - The customer is `rejected` based on the form's logic.
++ 2 - The customer is `refered` to an IMA review.
++ 3 - The customer either Canceled the yourney (PMeds) or has selected "I disagree" to the agreement question (Clinics).
+
+### PMed Context (object)
+
++ storeId: 54321 (number)
++ catalogId: 12345 (number)
++ catentryId: 1 (number)
++ userId: `5d87720f-b8e8-4517-aea1-aea5b09bebf6`
++ quantity: 42 (number)
++ returnURL: `http://boots.com/basket?more=URL&stuff`
++ cancelURL: `http://google.com`
++ formId: 3142 (number)
 
 ### Submission (object)
 
-- clinicSessionID: `da1eab5c-9995-42a1-8393-9b2bbe96c9b0` (required, UUID) - The session ID given by WCS
+- clinicSessionID: `d66b73d1-a67e-4d76-afac-69f3486624de` (required, UUID) - The session ID given by WCS
 - submissionID: `da1eab5c-9995-42a1-8393-9b2bbe96c9b0` (required, UUID) - The Webforms Analytics record ID leading to the data submitted via teh Webform
-- outcome: 0, 1, 2, 3 (optional, enum[number]) - The outcome computed based on the submitted data. The available values are: 0 (Accepted), 1 (Rejected), 2 (Referred), 3 (Canceled)
+- outcome: (optional, Outcome) - The outcome computed based on the submitted data.
 - progressBarSegments: 8 (optional, number) - the total number of progressbar segments Webforms rendered.
+- context: (optional, PMed Context) - The `window.wcs.pmed.context` or `window.wcs.clinic.context` Javascript object of the customer's browser runtime is passed back to wcs via this attribute.
 
 ### WCS Response (object)
 
@@ -34,12 +49,10 @@ Eg: da1eab5c-9995-42a1-8393-9b2bbe96c9b0
 
 ### Error
 
-+ errorCode: 100 (required,number) - an identifier for a formal error.
-+ errorLog: log1, log2 (optional, array) - an array of technical error messages to be also logged by the consuming application (Webforms).
-+ errorMessage: An error occured (required, string) - an error message aimed at a non technical user.
++ errorCode: 42 (required,number) - an identifier for a formal error.
++ errorMessage: Something went wrong.` (required, string) - an error message aimed at a non technical user.
++ errorLog: (optional, fixed, array[string]) - an array of technical error messages to be also logged by the consuming application (Webforms).
 
-
-### WCS Errors (array[Error])
 
 ## PH form status servlet [/webapp/servlet/PHFormStatus]
 ### Post a new Clinic or PMeds form outcome  [POST]
@@ -52,10 +65,11 @@ object.
 For PMed forms just rename the attribute `clinicSessionID` to `pmedSessionID`.
 
 + Request (application/json)
-    This is the payload that Webforms will deliver to WCS uppon a Webform submission.
-
+    This is the payload that Webforms will deliver to WCS uppon a Webform form submission.
+    
+    Note: Webforms will do no processing at all to the contents of the _`context`_ element
+    
     + Attributes (Submission)
-
 
 + Response 201 (application/json)
     The expected success response. This means WCS has processed the above request and the user can now be navigated away from the Webform to some WCS controlled page.
@@ -66,3 +80,31 @@ For PMed forms just rename the attribute `clinicSessionID` to `pmedSessionID`.
     Something went wrong. The Customer must be notified about this as do the Webforms operators.
     
     + Attributes (array[Error], fixed)
+        + (Error)
+            + errorCode: 100 (number)
+            + errorMessage: `Something very technical went wrong!`
+            + errorLog: `First log`, `Second log! (maybe the first line of a stack trace?)` (array[string])
+                
+    + Schema
+    
+            {
+                "$schema": "http://json-schema.org/draft-04/schema#",
+                "type": "array",
+                "items": [{
+                    "type": "object",
+                    "properties": {
+                        "errorCode": {
+                            "type": "integer",
+                        },
+                        "errorMessage": {
+                            "type": "string",
+                        },
+                        "errorLog": {
+                            "type": "array",
+                            "items": [{
+                              "type": "string",
+                            }]
+                        }
+                  }
+                }],
+            }
