@@ -116,13 +116,13 @@ For PMed forms just rename the attribute `clinicSessionID` to `pmedSessionID`.
 
     
 + Request (application/json)
-    This is the payload that Webforms will deliver to WCS with a _`cancel`_ outcome.
+    This is the payload that Webforms will deliver to WCS with a _`cancel`_ outcome. It is largely similar to the success scenario with the only difference being that the `outcome` parameter is always `3` and the `submissionID` is always `null`
     
     Note: Webforms will do no processing at all to the contents of the _`context`_ element
     
     + Attributes (Submission Cancel)
 
 + Response 201 (application/json)
-    The expected success response. This means WCS has processed the above request and the user can now be navigated away from the Webform to some WCS controlled page.
+    Webforms requires WCS to issue a redirection location in this case.
 
     + Attributes (WCS Response)
