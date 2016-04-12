@@ -38,10 +38,15 @@ Eg: da1eab5c-9995-42a1-8393-9b2bbe96c9b0
 ### Submission (object)
 
 - clinicSessionID: `d66b73d1-a67e-4d76-afac-69f3486624de` (required, UUID) - The session ID given by WCS
-- submissionID: `da1eab5c-9995-42a1-8393-9b2bbe96c9b0` (required, UUID) - The Webforms Analytics record ID leading to the data submitted via teh Webform
-- outcome: (optional, Outcome) - The outcome computed based on the submitted data.
+- submissionID: `da1eab5c-9995-42a1-8393-9b2bbe96c9b0` (required, nullable, UUID) - The Webforms Analytics record ID leading to the data submitted via the Webform.
+- outcome: (optional, Outcome) 0 - The outcome computed based on the submitted data.
 - progressBarSegments: 8 (optional, number) - the total number of progressbar segments Webforms rendered.
 - context: (optional, PMed Context) - The `window.wcs.pmed.context` or `window.wcs.clinic.context` Javascript object of the customer's browser runtime is passed back to wcs via this attribute.
+
+### Submission Cancel (Submission)
+
+- submissionID (required, nullable) - The Webforms Analytics record ID leading to the data submitted via the Webform.
+- outcome: 3 (optional, number)
 
 ### WCS Response (object)
 
@@ -108,3 +113,16 @@ For PMed forms just rename the attribute `clinicSessionID` to `pmedSessionID`.
                   }
                 }],
             }
+
+    
++ Request (application/json)
+    This is the payload that Webforms will deliver to WCS with a _`cancel`_ outcome.
+    
+    Note: Webforms will do no processing at all to the contents of the _`context`_ element
+    
+    + Attributes (Submission Cancel)
+
++ Response 201 (application/json)
+    The expected success response. This means WCS has processed the above request and the user can now be navigated away from the Webform to some WCS controlled page.
+
+    + Attributes (WCS Response)
