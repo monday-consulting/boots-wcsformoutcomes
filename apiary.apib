@@ -19,21 +19,21 @@ Eg: da1eab5c-9995-42a1-8393-9b2bbe96c9b0
 
 ### Outcome (enum[number])
 
-+ 0 - The form logic determined an `accepted` state.
++ 0 - Value 0 The form logic determined an `accepted` state.
 + 1 - The customer is `rejected` based on the form's logic.
 + 2 - The customer is `refered` to an IMA review.
 + 3 - The customer either Canceled the yourney (PMeds) or has selected "I disagree" to the agreement question (Clinics).
 
 ### PMed Context (object)
 
-+ storeId: 54321 (number)
-+ catalogId: 12345 (number)
-+ catentryId: 1 (number)
-+ userId: `5d87720f-b8e8-4517-aea1-aea5b09bebf6`
-+ quantity: 42 (number)
-+ returnURL: `http://boots.com/basket?more=URL&stuff`
-+ cancelURL: `http://google.com`
-+ formId: 3142 (number)
++ storeId: 54321 (optional, number)
++ catalogId: 12345 (optional, number)
++ catentryId: 1 (optional, number)
++ userId: `5d87720f-b8e8-4517-aea1-aea5b09bebf6` (optional)
++ quantity: 42 (optional, number)
++ returnURL: `http://boots.com/basket?more=URL&stuff` (optional)
++ cancelURL: `http://google.com` (optional)
++ formId: 3142 (optional, number)
 
 ### Submission (object)
 
