@@ -43,6 +43,12 @@ Eg: da1eab5c-9995-42a1-8393-9b2bbe96c9b0
 - progressBarSegments: 8 (optional, number) - the total number of progressbar segments Webforms rendered.
 - context: (optional, PMed Context) - The `window.wcs.pmed.context` or `window.wcs.clinic.context` Javascript object of the customer's browser runtime is passed back to wcs via this attribute.
 
+
+### Submission Bad (Submission)
+
+- clinicSessionID (optional, nullable) - This bad submission does not provide a Session ID for Clinics
+- submissionID (optional, nullable) - The Webforms Analytics record ID leading to the data submitted via the Webform.
+
 ### Submission Cancel (Submission)
 
 - submissionID (required, nullable) - The Webforms Analytics record ID leading to the data submitted via the Webform.
@@ -81,6 +87,11 @@ For PMed forms just rename the attribute `clinicSessionID` to `pmedSessionID`.
 
     + Attributes (WCS Response)
 
++ Request (application/json)
+    This is an example for a bad request. This request should trigger an error.
+    
+    + Attributes (Submission Bad)
+
 + Response 400 (application/json)
     Something went wrong. The Customer must be notified about this as do the Webforms operators.
     
@@ -113,6 +124,7 @@ For PMed forms just rename the attribute `clinicSessionID` to `pmedSessionID`.
                   }
                 }],
             }
+
 
     
 + Request (application/json)
