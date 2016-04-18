@@ -138,3 +138,46 @@ For PMed forms just rename the attribute `clinicSessionID` to `pmedSessionID`.
     Webforms requires WCS to issue a redirection location in this case.
 
     + Attributes (WCS Response)
+    
+## Resource to test error handling [/this/url/will/not/exist/in/the/implementation/errors]
+### POST
+This ressource will always return an error. It is only meant for deveopment work do not to access this resource on implementations.
+The specific scenario here is that Webforms submitts a Badly formed message to the WCS Webservice.
+
++ Request (application/json)
+    This is an example for a bad request. This request should trigger an error.
+    
+    + Attributes (Submission Bad)
+
++ Response 400 (application/json)
+    Something went wrong. The Customer must be notified about this as do the Webforms operators.
+    
+    + Attributes (array[Error], fixed)
+        + (Error)
+            + errorCode: 100 (number)
+            + errorMessage: `Something very technical went wrong!`
+            + errorLog: `First log`, `Second log! (maybe the first line of a stack trace?)` (array[string])
+                
+    + Schema
+    
+            {
+                "$schema": "http://json-schema.org/draft-04/schema#",
+                "type": "array",
+                "items": [{
+                    "type": "object",
+                    "properties": {
+                        "errorCode": {
+                            "type": "integer",
+                        },
+                        "errorMessage": {
+                            "type": "string",
+                        },
+                        "errorLog": {
+                            "type": "array",
+                            "items": [{
+                              "type": "string",
+                            }]
+                        }
+                  }
+                }],
+            }
