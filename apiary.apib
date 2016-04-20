@@ -61,7 +61,7 @@ Eg: da1eab5c-9995-42a1-8393-9b2bbe96c9b0
 ### Error
 
 + errorCode: 42 (required,number) - an identifier for a formal error.
-+ errorMessage: Something went wrong.` (required, string) - an error message aimed at a non technical user.
++ errorMessage: Something went wrong.` (required, string) - An error message aimed at a non technical user. This will be renderd by webforms to the customer and can be markdown.
 + errorLog: (optional, fixed, array[string]) - an array of technical error messages to be also logged by the consuming application (Webforms).
 
 
@@ -108,23 +108,27 @@ For PMed forms just rename the attribute `clinicSessionID` to `pmedSessionID`.
             {
                 "$schema": "http://json-schema.org/draft-04/schema#",
                 "type": "array",
-                "items": [{
-                    "type": "object",
-                    "properties": {
-                        "errorCode": {
-                            "type": "integer",
-                        },
-                        "errorMessage": {
-                            "type": "string",
-                        },
-                        "errorLog": {
-                            "type": "array",
-                            "items": [{
-                              "type": "string",
-                            }]
+                "items": [
+                    {
+                        "type": "object",
+                        "properties": {
+                            "errorCode": {
+                                "type": "integer"
+                            },
+                            "errorMessage": {
+                                "type": "string"
+                            },
+                            "errorLog": {
+                                "type": "array",
+                                "items": [
+                                    {
+                                        "type": "string"
+                                    }
+                                ]
+                            }
                         }
-                  }
-                }],
+                    }
+                ]
             }
 
 
