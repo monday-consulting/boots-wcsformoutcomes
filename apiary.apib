@@ -37,9 +37,9 @@ Eg: da1eab5c-9995-42a1-8393-9b2bbe96c9b0
 
 ### Submission (object)
 
-- clinicSessionID: `d66b73d1-a67e-4d76-afac-69f3486624de` (required, UUID) - The session ID given by WCS
+- clinicSessionID: `d66b73d1-a67e-4d76-afac-69f3486624de` (required, nullable, UUID) - The session ID given by WCS
 - submissionID: `da1eab5c-9995-42a1-8393-9b2bbe96c9b0` (required, nullable, UUID) - The Webforms Analytics record ID leading to the data submitted via the Webform.
-- outcome: (optional, Outcome) 0 - The outcome computed based on the submitted data.
+- outcome: (optional, nullable, Outcome) 0 - The outcome computed based on the submitted data.
 - progressBarSegments: 8 (optional, number) - the total number of progressbar segments Webforms rendered.
 - context: (optional, PMed Context) - The `window.wcs.pmed.context` or `window.wcs.clinic.context` Javascript object of the customer's browser runtime is passed back to wcs via this attribute.
 
